@@ -61,7 +61,7 @@ customElements.define(
                 <label for="comments">Comentarios</label>
                  <textarea name="comments" cols="15" rows="5"></textarea>
                 <input type="submit" id="button" value="Enviar">
-                <input type="hidden" name="_next" value="http://localhost:1234">
+                <input type="hidden" name="_next" value="https://petlost.onrender.com">
                 <input type="hidden" name="_captcha" value="false">
              
             </div>
