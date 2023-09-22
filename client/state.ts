@@ -37,7 +37,7 @@ const state = {
   },
 
   async authUser(email) {
-    const res = await fetch(API_BASE_URL + "/check", {
+    const res = await fetch("/check", {
       method: "post",
       headers: {
         "content-type": "application/json",
@@ -53,7 +53,7 @@ const state = {
   async signUp(userData) {
     const currentState = this.getState();
 
-    const res = await fetch(API_BASE_URL + "/auth", {
+    const res = await fetch( "/auth", {
       method: "post",
       headers: {
         "content-type": "application/json",
@@ -72,7 +72,7 @@ const state = {
   async signIn(password) {
     const currentState = this.getState();
 
-    const res = await fetch(API_BASE_URL + "/auth/token", {
+    const res = await fetch("/auth/token", {
       method: "post",
       headers: {
         "content-type": "application/json",
@@ -95,7 +95,7 @@ const state = {
 
   async myInfo() {
     const currentState = state.getState();
-    const res = await fetch(API_BASE_URL + "/me", {
+    const res = await fetch("/me", {
       headers: {
         "content-type": "application/json",
         authorization: `bearer ${currentState.authtoken}`,
@@ -148,7 +148,7 @@ const state = {
   async createPet(petData) {
     const currentState = this.getState();
 
-    const res = await fetch(API_BASE_URL + "/pets", {
+    const res = await fetch("/pets", {
       method: "post",
       headers: {
         "content-type": "application/json",
@@ -165,7 +165,7 @@ const state = {
   async getPetData(petId) {
     const currentState = this.getState();
 
-    const res = await fetch(API_BASE_URL + "/pets/" + petId, {
+    const res = await fetch("/pets/" + petId, {
       headers: {
         "content-type": "application/json",
         authorization: `bearer ${currentState.authtoken}`,
@@ -189,7 +189,7 @@ const state = {
 
   async getMyPets() {
     const currentState = this.getState();
-    const res = await fetch(API_BASE_URL + "/me/pets/", {
+    const res = await fetch("/me/pets/", {
       headers: {
         "content-type": "application/json",
         authorization: `bearer ${currentState.authtoken}`,
