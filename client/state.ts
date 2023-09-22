@@ -37,7 +37,7 @@ const state = {
   },
 
   async authUser(email) {
-    const res = await fetch(API_BASE_URL + "https://petlost.onrender.com/check", {
+    const res = await fetch(API_BASE_URL + "/check", {
       method: "post",
       headers: {
         "content-type": "application/json",
