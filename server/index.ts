@@ -34,6 +34,9 @@ app.use(
 // });
 const SECRET = process.env.SECRET;
 const frontEndPath = path.resolve(__dirname, "../dist");
+function getSHA256ofString(text: string) {
+  return crypto.createHash("sha256").update(text).digest("hex");
+}
 
 //authorization middleware
 function authMiddleware(req, res, next) {
@@ -64,20 +67,29 @@ app.post("/check", async (req, res) => {
 //sign up
 app.post("/auth", async (req, res) => {
   const { email, password, name } = req.body;
-  const user = await createUser({ email, password, name }).catch((err) => {
-    res.status(400).json({
-      message: err,
-    });
-  });
-  res.json(user);
+  try {
+    const newUser = await createUser(name, email);
+    const userId = await newUser.user.get("id");
+    const passwordHashed = getSHA256ofString(password);
+    const newAuth = await createAuth(userId, email, passwordHashed);
+
+    res.json(newUser);
+  } catch (error) {
+    res.send({ error });
+  }
 });
-//sign in
+//obtener token de usuario registrado
 app.post("/auth/token", async (req, res) => {
   const { email, password } = req.body;
-  const token = await getToken({ email, password });
-  res.json(token);
+  const passwordHasheado = getSHA256ofString(password);
+  const auth = await authId(email, passwordHasheado);
+  if (auth !== null) {
+    const token = jwt.sign({ id: auth.get("user_id") }, SECRET);
+    res.status(200).json({ token });
+  } else {
+    res.status(400).json({ error: "User or Password incorrecto" });
+  }
 });
-
 //get user data
 app.get("/me", authMiddleware, async (req, res) => {
   const userId = req._user.id;
