@@ -10,6 +10,8 @@ import {
   getToken,
   updateUser,
   getUserProfile,
+    createAuth,
+  authId,
 } from "./controllers/auth-controller";
 
 import {
