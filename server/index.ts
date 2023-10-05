@@ -66,31 +66,20 @@ app.post("/check", async (req, res) => {
     user: userExist,
   });
 });
-//sign up
 app.post("/auth", async (req, res) => {
   const { email, password, name } = req.body;
-  try {
-    const newUser = await createUser(name, email);
-    const userId = await newUser.user.get("id");
-    const passwordHashed = getSHA256ofString(password);
-    const newAuth = await createAuth(userId, email, passwordHashed);
-
-    res.json(newUser);
-  } catch (error) {
-    res.send({ error });
-  }
+  const user = await createUser({ email, password, name }).catch((err) => {
+    res.status(400).json({
+      message: err,
+    });
+  });
+  res.json(user);
 });
-//obtener token de usuario registrado
+//sign in
 app.post("/auth/token", async (req, res) => {
   const { email, password } = req.body;
-  const passwordHasheado = getSHA256ofString(password);
-  const auth = await authId(email, passwordHasheado);
-  if (auth !== null) {
-    const token = jwt.sign({ id: auth.get("user_id") }, SECRET);
-    res.status(200).json({ token });
-  } else {
-    res.status(400).json({ error: "User or Password incorrecto" });
-  }
+  const token = await getToken({ email, password });
+  res.json(token);
 });
 //get user data
 app.get("/me", authMiddleware, async (req, res) => {
