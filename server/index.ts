@@ -79,15 +79,8 @@ app.post("/auth", async (req, res) => {
 //obtener token de usuario registrado
 app.post("/auth/token", async (req, res) => {
   const { email, password } = req.body;
-  const passwordHasheado = getSHA256ofString(password);
-  const auth = await authId(email, passwordHasheado);
-  if (auth !== null) {
-    const token = jwt.sign({ id: auth.get("user_id") }, SECRET);
-    res.status(200).json({ token });
-  } else {
-    res.status(400).json({ error: "User or Password incorrecto" });
-  }
-});
+  const token = await getToken({ email, password });
+  res.json(token);
 //get user data
 app.get("/me", authMiddleware, async (req, res) => {
   const userId = req._user.id;
